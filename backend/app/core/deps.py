@@ -1,0 +1,69 @@
+"""
+Auth dependency — FastAPI Depends() helper that validates the bearer token,
+checks the Redis blacklist, and returns the current user from the DB.
+"""
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+import redis.asyncio as aioredis
+
+from app.core.database import get_async_db
+from app.core.redis import redis_dependency, is_token_blacklisted
+from app.core.security import decode_token
+from app.model.models import User
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_async_db),
+    redis: aioredis.Redis = Depends(redis_dependency),
+) -> User:
+    credentials_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = decode_token(token)
+        user_id: str = payload.get("sub")
+        jti: str = payload.get("jti")
+        token_type: str = payload.get("type")
+
+        if not user_id or not jti or token_type != "access":
+            raise credentials_error
+    except JWTError:
+        raise credentials_error
+
+    # ── Check Redis blacklist ──────────────────────────────────────────────────
+    if await is_token_blacklisted(redis, jti):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has been revoked. Please log in again.",
+        )
+
+    # ── Load user from DB ──────────────────────────────────────────────────────
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+
+    if user is None or not user.is_active:
+        raise credentials_error
+
+    return user
+
+
+async def get_current_admin(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required.",
+        )
+    return current_user

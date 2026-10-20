@@ -1,0 +1,34 @@
+# ─── Core Framework ────────────────────────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9         # file uploads
+
+# ─── Database (Supabase / PostgreSQL) ──────────────────────────────────────────
+sqlalchemy==2.0.35
+asyncpg==0.29.0                 # async PostgreSQL driver
+supabase==2.7.4                 # Supabase Python client (Storage, Auth)
+psycopg2-binary==2.9.9          # sync driver (migrations / admin)
+
+# ─── Redis / Upstash ───────────────────────────────────────────────────────────
+redis[asyncio]==5.0.8           # redis-py with async support (Upstash compatible)
+
+# ─── Auth & Security ───────────────────────────────────────────────────────────
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1
+
+# ─── Config & Validation ───────────────────────────────────────────────────────
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# ─── HTTP Client ───────────────────────────────────────────────────────────────
+httpx==0.27.2
+
+# ─── Background Tasks / Rate Limiting ──────────────────────────────────────────
+slowapi==0.1.9                  # rate limiting middleware for FastAPI
+
+# ─── File Handling ─────────────────────────────────────────────────────────────
+aiofiles==24.1.0
+
+# ─── AI / OpenAI (RAG chatbot) ─────────────────────────────────────────────────
+openai==1.51.0

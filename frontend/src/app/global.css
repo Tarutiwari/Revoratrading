@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Color Palette - Harmonized Luxury Blend from User Swatches */
+    --color-teal-primary: #007D6D;
+    --color-teal-dark: #006356;
+    --color-teal-light: #0d9685;
+    --color-teal-soft: #e3f4f1;
+    --color-teal-glow: rgba(0, 125, 109, 0.15);
+
+    --color-terracotta: #C88A75;
+    --color-terracotta-dark: #b5745e;
+    --color-terracotta-light: #dba08c;
+    --color-terracotta-soft: #faeee9;
+    --color-terracotta-glow: rgba(200, 138, 117, 0.18);
+
+    --color-slate-blue: #8E9EB8;
+    --color-slate-blue-dark: #71839f;
+    --color-slate-soft: #edf2f8;
+
+    --color-sand-cream: #FAF7F2;
+    --color-sand-muted: #F2ECE1;
+    --color-sand-border: #E5DDD3;
+    --color-sand-accent: #D49B74;
+
+    --color-espresso: #2C221E;
+    --color-espresso-body: #4E3E39;
+    --color-espresso-muted: #7E6F68;
+
+    --color-card-bg: #FFFFFF;
+    --color-card-glass: rgba(255, 255, 255, 0.88);
+    --color-card-border: rgba(229, 221, 211, 0.85);
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--color-sand-cream);
+    color: var(--color-espresso-body);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar for trading interfaces */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1ece4;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c9bea9;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a99d88;
+  }
+}
+
+/* Background Trading Grid & Atmosphere */
+.trading-bg-grid {
+  background-image: 
+    linear-gradient(to right, rgba(200, 190, 175, 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(200, 190, 175, 0.16) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.trading-radial-glow {
+  background: radial-gradient(circle at 50% 10%, rgba(0, 125, 109, 0.08) 0%, rgba(200, 138, 117, 0.05) 40%, transparent 70%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 221, 211, 0.9);
+  box-shadow: 0 4px 20px -2px rgba(44, 34, 30, 0.04), 0 2px 6px -1px rgba(44, 34, 30, 0.02);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(44, 34, 30, 0.08), 0 4px 10px -2px rgba(0, 125, 109, 0.06);
+  border-color: rgba(0, 125, 109, 0.35);
+}
+
+.glow-teal-sm {
+  box-shadow: 0 0 18px rgba(0, 125, 109, 0.22);
+}
+.glow-terracotta-sm {
+  box-shadow: 0 0 18px rgba(200, 138, 117, 0.25);
+}
+
+/* Animations */
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.02); }
+}
+
+@keyframes tickerMarquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 4s ease-in-out infinite;
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: tickerMarquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
